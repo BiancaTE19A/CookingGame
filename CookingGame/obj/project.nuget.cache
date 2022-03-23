@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ced5PbeVbPi2W+iRGsHbwynHmPXocgcNcI04wwSGLjsk5VRnM/hYxuaHUFj1RlBrpoKoT8ucYh002o1ITyQyuw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Bianca.reutergardh\\Desktop\\SKOLA\\Prog2021-2022\\CookingGame\\CookingGame\\CookingGame.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Bianca.reutergardh\\.nuget\\packages\\raylib-cs\\4.0.0.1\\raylib-cs.4.0.0.1.nupkg.sha512",
+    "C:\\Users\\Bianca.reutergardh\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\Bianca.reutergardh\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.13\\microsoft.netcore.app.host.win-x64.5.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}
