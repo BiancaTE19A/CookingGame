@@ -1,20 +1,42 @@
 using System;
 using Raylib_cs;
+using System.Numerics;
+using System.Collections.Generic;
 
 namespace CookingGame
 {
-    public class Plate
+    public class Plate : InteractableGameObject
     {
-        Rectangle plate = new Rectangle(1460, 440, 25, 25);
-
-        public Plate()
+        public Plate(int x, int y, Texture2D texture, float imageScale) : base(x, y, texture, imageScale)
         {
-            Draw();
+
         }
 
-        public void Draw()
+        public override void Interact(Player p)
         {
-            Raylib.DrawRectangleRec(plate, Color.WHITE);
+            //Ifall spelaren håller i en ingrediens
+            if (p.IsHoldingIngredient())
+            {
+                //Ifall det finns en ingrediens på tallriken, gör något konstig combine sak
+                if (IsHoldingIngredient())
+                {
+
+                }
+                //Annars ta spellarens ingrediens och lägg den på tallriken
+                else
+                {
+                    heldIngredient = p.heldIngredient;
+                    p.heldIngredient = null;
+                    heldIngredient.MoveTo(rec.x, rec.y);
+                }
+            }
+            //Annars plockar spelaren upp det som finns på tallriken
+            else
+            {
+                p.heldIngredient = heldIngredient;
+                heldIngredient = null;
+                p.heldIngredient.MoveTo(p.mousePosition.X, p.mousePosition.Y);
+            }
         }
     }
 }

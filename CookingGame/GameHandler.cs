@@ -1,74 +1,71 @@
 using System;
 using Raylib_cs;
+using System.Numerics;
 using System.Collections.Generic;
 
 namespace CookingGame
 {
     public class GameHandler
     {
-        int lettuceWidth = 1201;
-        int lettuceHeight = 1050;
-
         Renderer renderer;
 
-        List<Lettuce> lettuceList = new();
-        Texture2D lettuceTexture;
-        Lettuce activeLettuce;
+        Player player;
+
+        List<InteractableGameObject> interactables = new List<InteractableGameObject>();
+
+        //En dictionary med alla texturer för enklare tillgång
+        Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public GameHandler()
         {
-            Raylib.InitWindow(1920, 1080, "Hello World");
+            Raylib.InitWindow(1920, 1080, "Game");
 
             renderer = new Renderer();
 
-            lettuceTexture = Raylib.LoadTexture(@"lettuce.png");
+            player = new Player();
 
-            lettuceList.Add(new Lettuce(40, 200, lettuceWidth, lettuceHeight, lettuceTexture));
+            textures.Add("Hamburger", Raylib.LoadTexture("Assets/hamburger.png"));
+            textures.Add("HamburgerBread", Raylib.LoadTexture("Assets/hamburger_bread.png"));
+            textures.Add("Hotdog", Raylib.LoadTexture("Assets/hotdog.png"));
+            textures.Add("HotdogBread", Raylib.LoadTexture("Assets/hotdog_bread.png"));
+            textures.Add("HotdogSausage", Raylib.LoadTexture("Assets/hotdog_sausage.png"));
+            textures.Add("Lettuce", Raylib.LoadTexture("Assets/lettuce.png"));
+
+            interactables.Add(new Spawner(300, 500, textures["HamburgerBread"], 0.4f, new HamburgerBread(300, 500, textures["HamburgerBread"], 0.4f)));
+
+            interactables.Add(new Plate(1400, 500, textures["Lettuce"], 0.3f));
 
             Run();
         }
 
-        public async void Run()
+        public void Run()
         {
             while (!Raylib.WindowShouldClose())
             {
                 //LOGIC
-
-                for (int i = lettuceList.Count - 1; i >= 0; i--)
-                {
-                    lettuceList[i].Update();
-
-                    if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT) && Raylib.CheckCollisionPointRec(Raylib.GetMousePosition(), lettuceList[i].rec) && !lettuceList[i].active)
-                    {
-
-                        Lettuce newLettuce = new Lettuce(Raylib.GetMouseX(), Raylib.GetMouseY(), lettuceWidth, lettuceHeight, lettuceTexture);
-                        activeLettuce = newLettuce;
-                        lettuceList.Add(newLettuce);
-                        // while (Raylib.IsMouseButtonUp(MouseButton.MOUSE_BUTTON_LEFT))
-                        // {
-                        //     lettuceList[0].rec.x = Raylib.GetMouseX();
-                        //     lettuceList[0].rec.y = Raylib.GetMouseY();
-                        // }
-                    }
-                }
-                if (activeLettuce != null)
-                {
-                    activeLettuce.Move();
-                }
-
+                player.Update();
+                //Kollar ifall spelaren klickar på någon av interactables och isåfall interagerar med de
+                player.CheckClickOnInteractables(interactables);
 
                 //DRAW
                 Raylib.BeginDrawing();
 
-                renderer.Render();
-
-                foreach (var lettuce in lettuceList)
-                {
-                    lettuce.Draw();
-                }
+                renderer.Render(GetAllGameObjects());
 
                 Raylib.EndDrawing();
             }
+        }
+
+        //Privat function som samlar in alla olika gameobjects i scenen (för att rita de t.ex.), eftersom de är utspridda överallt
+        private List<GameObject> GetAllGameObjects()
+        {
+            List<GameObject> gameObjects = new List<GameObject>();
+            gameObjects.AddRange(interactables);
+            if (player.IsHoldingIngredient())
+            {
+                gameObjects.Add(player.heldIngredient);
+            }
+            return gameObjects;
         }
 
     }
