@@ -5,10 +5,12 @@ using System.Collections.Generic;
 
 namespace CookingGame
 {
+    //Detta är alla saker som spelaren ska kunna klicka på, stove plate osv
     public class InteractableGameObject : GameObject
     {
-        //Jag antar att alla interactable game objectes har en held ingredient (egentligen borde det va i en till subclass)
-        public Ingredient heldIngredient;
+
+        //Jag antar att alla interactable game objects har en held ingredient (egentligen borde det va i en till subclass)
+        public FoodObject heldFood;
 
         public InteractableGameObject(int x, int y, Texture2D texture, float imageScale) : base(x, y, texture, imageScale)
         {
@@ -18,11 +20,10 @@ namespace CookingGame
         {
             //Rita det vanliga
             base.Draw();
-
             //Sen rita ingrediensen ifall den finns
             if (IsHoldingIngredient())
             {
-                heldIngredient.Draw();
+                heldFood.Draw();
             }
         }
 
@@ -35,8 +36,7 @@ namespace CookingGame
         //Förenklar att kolla ifall spelaren håller i en ingrediens
         public bool IsHoldingIngredient()
         {
-            return heldIngredient != null;
+            return heldFood != null;
         }
-
     }
 }
